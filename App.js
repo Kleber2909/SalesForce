@@ -8,7 +8,7 @@ const RootStack = createStackNavigator({
   Itens: Itens,
   ModulosCliente: ModulosCliente,
 }, {
-  initialRouteName: "Itens"
+  initialRouteName: "Clientes"
 });
 
 const App = createAppContainer(RootStack);
