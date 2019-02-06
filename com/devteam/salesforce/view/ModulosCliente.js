@@ -1,25 +1,28 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, TouchableOpacity, ListView, ScrollView, Alert, } from 'react-native';
 
+var cliente = "";
 
 export default class ModulosCliente extends React.Component {
   
     constructor(props) {
       super(props);
       const { navigation } = this.props;
-      const id = navigation.getParam('id', '0');
+      cliente = navigation.getParam('cliente', '');
+      console.log("Cliente ", cliente.Nome);
     }
     
-    static navigationOptions = {
-        title: 'Sales Force',
-      };
+    static navigationOptions = ({ navigation }) => {
+      return {
+        title: (navigation.getParam('cliente', 'SALES FORCE')).Nome
+      }
+    };
 
     render() {
       return (
         
         <View style={styles.container}>   
           <View style={styles.box} >
-            <TextInput placeholder = "Sales Force" keyboardType = "email-address" returnKeyType = "next" style={styles.textInput} onChangeText={(email) => this.setState({email})}/>
           </View>
         </View>      
       );

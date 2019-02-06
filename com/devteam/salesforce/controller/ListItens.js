@@ -19,7 +19,7 @@ export default class ListItens extends React.Component {
 
       getDataFirebase() {
         try{
-         let dbRef = db.ref('/Itens');
+         let dbRef = db.ref('/' + globalClienteId + '/Itens');
          dbRef.on('value', (snapshot) => {
            try{
              //console.log("Itens: ", snapshot.val());
@@ -37,7 +37,7 @@ export default class ListItens extends React.Component {
      }
 
      renderRow(rowData) {
-        console.log("renderRow ", rowData);
+        //console.log("renderRow ", rowData);
         //console.log("Nome ", rowData.Nome);
         return (
             <TouchableOpacity style={{height:75} } onPress={ this.onPressList.bind(this, rowData)}  >
