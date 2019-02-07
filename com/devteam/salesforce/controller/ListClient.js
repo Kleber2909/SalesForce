@@ -19,17 +19,21 @@ export default class ListClient extends React.Component {
 
       getDataFirebase() {
         try{
-         let dbRef = db.ref('/Clientes');
-         dbRef.on('value', (snapshot) => {
-           try{
+          console.log("globalClienteId", globalClienteId, " globalVendedor", globalVendedor)
+          let dbRef = db.ref('/' + globalClienteId + '/Clientes');
+          //let dbRef = db.ref('/salesforce001/Clientes');
+          //dbRef.orderByChild("Vendedor").equalTo(a).on('value', (snapshot) => {
+           // dbRef.where('Vendedor', '=', 1).orderByChild("Nome").on('value', (snapshot) => {
+          dbRef.on('value', (snapshot) => {
+          try{
              //console.log("clientes: ", snapshot.val());
              this.setState({dataSource:this.state.dataSource.cloneWithRows(snapshot.val()),})
-           }
-           catch(error){
+          }
+          catch(error){
              console.log("error: ", error);
              this.setState({dataSource:this.state.dataSource.cloneWithRows(""),})
-           }
-         });
+          }
+         }); 
        }
        catch(error){
          console.log("error: ", error);
@@ -49,7 +53,7 @@ export default class ListClient extends React.Component {
 
     onPressList = (rowData) =>{
         console.log("clik " + rowData.Codigo)
-        propsClientes.navigation.navigate('ModulosCliente', {id: rowData.Codigo}); 
+        propsClientes.navigation.navigate('ModulosCliente', {cliente: rowData, }); 
       }
 
       render() {

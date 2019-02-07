@@ -1,14 +1,37 @@
 import { createStackNavigator, createAppContainer} from 'react-navigation';
+import Home from './com/devteam/salesforce/view/Home'
 import Clientes from './com/devteam/salesforce/view/Clientes'
-import Itens from './com/devteam/salesforce/view/Itens'
+import ItensEstoque from './com/devteam/salesforce/view/ItensEstoque'
 import ModulosCliente from './com/devteam/salesforce/view/ModulosCliente'
+import Configuracoes from './com/devteam/salesforce/view/Configuracoes'
+import Pedido from './com/devteam/salesforce/view/Pedido'
+import { GetConfig } from './com/devteam/salesforce/persistence/Storage';
+
+//global.globalClienteId = "salesforce001";
+GetConfig();
 
 const RootStack = createStackNavigator({
+  Home: Home,
   Clientes: Clientes,
-  Itens: Itens,
+  ItensEstoque: ItensEstoque,
   ModulosCliente: ModulosCliente,
-}, {
-  initialRouteName: "Clientes"
+  Configuracoes: Configuracoes,
+  Pedido: Pedido,
+}, 
+{
+  // Tela inicial
+  initialRouteName: "Home",
+
+  // Configurações do layout do cabeçalho
+  defaultNavigationOptions: {
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  },
 });
 
 const App = createAppContainer(RootStack);

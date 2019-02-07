@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert, Image} from 'react-native';
 import ListItens from '../controller/ListItens';
 
-export default class Itens extends React.Component {
+export default class ItensEstoque extends React.Component {
   
   propsItens = "";
 
@@ -12,7 +12,7 @@ export default class Itens extends React.Component {
   }
   
   static navigationOptions = {
-    title: 'Lista de itens',
+    title: 'LISTA DE ITENS',
   };
 
   render() {

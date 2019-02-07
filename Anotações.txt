@@ -4,8 +4,6 @@ npm install expo-cli --global
 npm install react-navigation --save
 npm install firebase --save
 
-
-
 Para abrir o emulador do Android
 Usar o comando abaixo para listar os emuladores configurados na máquina
     C:\Users\kleber\AppData\Local\Android\sdk\tools\emulator.exe -list-avds
@@ -13,3 +11,5 @@ Usar o comando abaixo para listar os emuladores configurados na máquina
 Usar o comando abaixo para iniciar um dos emuladores.
     C:\Users\kleber\AppData\Local\Android\sdk\tools\emulator.exe -avd Nexus_7_2012_API_22
 
+
+https://facebook.github.io/react-native/docs/asyncstorage
