@@ -23,6 +23,7 @@ export default class ListClient extends React.Component {
           let dbRef = db.ref('/' + globalClienteId + '/Clientes');
           //let dbRef = db.ref('/salesforce001/Clientes');
           //dbRef.orderByChild("Vendedor").equalTo(a).on('value', (snapshot) => {
+           // dbRef.where('Vendedor', '=', 1).orderByChild("Nome").on('value', (snapshot) => {
           dbRef.on('value', (snapshot) => {
           try{
              //console.log("clientes: ", snapshot.val());
@@ -32,7 +33,7 @@ export default class ListClient extends React.Component {
              console.log("error: ", error);
              this.setState({dataSource:this.state.dataSource.cloneWithRows(""),})
           }
-         });
+         }); 
        }
        catch(error){
          console.log("error: ", error);
