@@ -40,10 +40,12 @@ export default class Pedido extends React.Component {
                 <Picker.Item label="BOLETO" value="1" />
                 <Picker.Item label="CARTÃO" value="2" />
             </Picker>
-            <TouchableOpacity style={styles.Touchable } onPress={ this.onPress.bind(this, "Pedido")}  >
+            <TouchableOpacity style={styles.Touchable } onPress={ this.onPress.bind(this, "Items", {codCliente: this.state.codCliente})}  >
                  <Text style={styles.text}>    Add Item </Text>
             </TouchableOpacity>
-            <ScrollView style = {{backgroundColor: '#9cf6f9',}} ></ScrollView>  
+            <ScrollView style = {{backgroundColor: '#9cf6f9',}} >
+
+            </ScrollView>  
           </View>  
       );
     }
@@ -68,6 +70,6 @@ const styles = StyleSheet.create({
 
   text: {fontSize: 20, height: 30, alignItems: 'center', justifyContent: 'space-around'},
   
-  picker: {margin: 12, fontSize: 20, height: 30, width: 300},
+  picker: {margin: 12, height: 30, width: 300},
 
   });
