@@ -18,7 +18,7 @@ export default class Home extends React.Component {
       
       <ScrollView style = {{backgroundColor: '#9cf6f9',}} >
         <View style={styles.container}>   
-            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "")}  >
+            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "Teste")}  >
                 <Text style={styles.text}>    Visitas do dia </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "Clientes")}  >

@@ -6,6 +6,7 @@ import ModulosCliente from './com/devteam/salesforce/view/ModulosCliente'
 import Configuracoes from './com/devteam/salesforce/view/Configuracoes'
 import Pedido from './com/devteam/salesforce/view/Pedido'
 import { GetConfig } from './com/devteam/salesforce/persistence/Storage';
+import Teste from './com/devteam/salesforce/controller/Teste'
 
 //global.globalClienteId = "salesforce001";
 GetConfig();
@@ -17,6 +18,7 @@ const RootStack = createStackNavigator({
   ModulosCliente: ModulosCliente,
   Configuracoes: Configuracoes,
   Pedido: Pedido,
+  Teste: Teste,
 }, 
 {
   // Tela inicial
