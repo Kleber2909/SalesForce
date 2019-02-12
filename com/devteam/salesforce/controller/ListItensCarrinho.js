@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, ListView, Button, TextInput} from 'react-native';
 import { db } from '../persistence/Firebase';
 
+var items = [];
 export default class ListItensCarrinho extends React.Component {
   
     constructor(props) {
@@ -28,18 +29,22 @@ export default class ListItensCarrinho extends React.Component {
          let dbRef = db.ref('/salesforce001/Itens');
          dbRef.on('value', (snapshot) => {
            try{
-            var items = [];
+            a = 0;
+            
             snapshot.forEach((item) => {
-              items.push({
-                Codigo: item.val().Codigo,
-                Descricao: item.val().Descricao,
-                Valor: item.val().Valor,
-                Estoque: item.val().Estoque,
-                Quantidade: 0,
-                _key: item.key
-              });
+              if(a <= 8){
+                a++;
+                items.push({
+                  Codigo: item.val().Codigo,
+                  Descricao: item.val().Descricao,
+                  Valor: item.val().Valor,
+                  Estoque: item.val().Estoque,
+                  Quantidade: 0,
+                  _key: item.key
+                });
+              }
             });
-             this.setState({dataSource: this.state.dataSource.cloneWithRows(items), itemsArray: items});
+             this.setState({dataSource: this.state.dataSource.cloneWithRows(items), });
            }
            catch(error){
              console.log("error: ", error);
@@ -69,32 +74,26 @@ export default class ListItensCarrinho extends React.Component {
             </View>            
           </View>
           <View style={styles.item_func}>
-            <Button style={styles.item} color="#2ecc71" title="+" onPress={this.onAdd.bind(this, rowData)}></Button>
+            <Button style={styles.item} color="#2ecc71" title="+" onPress={this.onAdd.bind(this, rowData, 1)}></Button>
             <TextInput style={styles.item} value={rowData.Quantidade.toString()} />
-            <Button style={styles.item} color="#e74c3c" title="-" onPress={this.onRem.bind(this, rowData)}></Button>
+            <Button style={styles.item} color="#e74c3c" title="-" onPress={this.onAdd.bind(this, rowData, -1)}></Button>
           </View>
         </View>
       );
     }
 
-    onAdd = (rowData) => {
-      let index = this.state.itemsArray.findIndex(x => x._key === rowData._key);
-      let newA = [];
-      if(index !== -1) {
-        newA = this.state.itemsArray;
-        newA[index].Quantidade = (parseInt(newA[index].Quantidade) + 1);
-        this.setState({itemsArray: newA})        
+    onAdd = (rowData, Add) => {
+      let index = items.findIndex(x => x._key === rowData._key);
+      
+      console.log("Index", index);
+     
+      if(index !== -1){
+        items[index].Quantidade = parseInt(rowData.Quantidade) + Add;
       }
-   
-      //this.setState({dataSource: this.state.dataSource.cloneWithRows(newA)});
 
-      this.setState((state) => {        
-        return {dataSource: state.dataSource.cloneWithRows(newA)};
+      this.setState((state, props) => {
+        return {counter: state.counter + props.step};
       });
-    }
-
-    onRem = (rowData) => {
-        
     }
 
       render() {        
