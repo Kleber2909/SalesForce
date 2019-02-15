@@ -6,7 +6,8 @@ var items = [];
 export default class ListItensCarrinho extends React.Component {
   
     constructor(props) {
-      super(props);      
+      super(props);
+      const { navigation } = this.props;
       var ds = new ListView.DataSource({rowHasChanged:(r1,r2) => r1 != r2});
       this.state = {
         itemsArray: [],
@@ -74,25 +75,35 @@ export default class ListItensCarrinho extends React.Component {
             </View>            
           </View>
           <View style={styles.item_func}>
-            <Button style={styles.item} color="#2ecc71" title="+" onPress={this.onAdd.bind(this, rowData, 1)}></Button>
+            <Button style={styles.item} color="#2ecc71" title="+" onPress={this.onAddItem.bind(this, rowData, 1)}></Button>
             <TextInput style={styles.item} value={rowData.Quantidade.toString()} />
-            <Button style={styles.item} color="#e74c3c" title="-" onPress={this.onAdd.bind(this, rowData, -1)}></Button>
+            <Button style={styles.item} color="#e74c3c" title="-" onPress={this.onAddItem.bind(this, rowData, -1)}></Button>
           </View>
         </View>
       );
     }
 
-    onAdd = (rowData, Add) => {
+    onAddItem = (rowData, Add) => {
       let index = items.findIndex(x => x._key === rowData._key);
       
       console.log("Index", index);
      
       if(index !== -1){
-        items[index].Quantidade = parseInt(rowData.Quantidade) + Add;
+        if(items[index].Quantidade >= 0) {
+          items[index].Quantidade = parseInt(rowData.Quantidade) + Add;          
+        }
       }
 
       this.setState((state, props) => {
         return {counter: state.counter + props.step};
+      });
+    }
+
+    onAddOrder = () => {
+      let itemsOrder = items.filter(item => item.Quantidade >= 1);
+
+      this.props.navigation.navigate('Pedido', {
+        itemsOrder: itemsOrder.slice(),
       });
     }
 
@@ -106,9 +117,7 @@ export default class ListItensCarrinho extends React.Component {
             />
             <View>
               <Text>Total(R$) {this.state.total}</Text>
-              <Button title="Adicionar" onPress={() => {
-                
-              }}/>
+              <Button title="Adicionar" onPress={this.onAddOrder.bind(this)}/>
             </View>            
           </View>
         );

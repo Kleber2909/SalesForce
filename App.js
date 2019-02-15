@@ -7,6 +7,7 @@ import Configuracoes from './com/devteam/salesforce/view/Configuracoes'
 import Pedido from './com/devteam/salesforce/view/Pedido'
 import Carrinho from './com/devteam/salesforce/view/Carrinho'
 import ListItensCarrinho from './com/devteam/salesforce/controller/ListItensCarrinho'
+import PedidoSelect from './com/devteam/salesforce/view/PedidoSelect';
 import { GetConfig } from './com/devteam/salesforce/persistence/Storage';
 
 //global.globalClienteId = "salesforce001";
@@ -20,7 +21,8 @@ const RootStack = createStackNavigator({
   Configuracoes: Configuracoes,
   Pedido: Pedido,
   Carrinho: Carrinho,
-  Items: ListItensCarrinho
+  Items: ListItensCarrinho,
+  PedidoSelect: PedidoSelect
 }, 
 {
   // Tela inicial
