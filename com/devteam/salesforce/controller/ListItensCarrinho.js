@@ -1,128 +1,121 @@
 import React from 'react';
-import { StyleSheet, Text, View, ListView, Button, TextInput} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert, Button, FlatList} from 'react-native';
+import ListItens from '../controller/ListItens';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { SalveConfig, GetConfig } from '../persistence/Storage';
 import { db } from '../persistence/Firebase';
 
-var items = [];
-export default class ListItensCarrinho extends React.Component {
-  
-    constructor(props) {
-      super(props);
-      const { navigation } = this.props;
-      var ds = new ListView.DataSource({rowHasChanged:(r1,r2) => r1 != r2});
-      this.state = {
-        itemsArray: [],
-        dataSource: ds.cloneWithRows([]),         
-        selectedItens: [],
-        total: 0
+const weekday = new Array(6);
+weekday[1] = "Segunda-Feira";
+weekday[2] = "Terça-Feira";
+weekday[3] = "Quarta-Feira";
+weekday[4] = "Quinta-Feira";
+weekday[5] = "Sexta-Feira";
+weekday[6] = "Sábado";
+
+let DayDay = new Date().getDay();
+
+export default class VisitasDia extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        Day: new Date().getDay(),
+        DayName: weekday[new Date().getDay()],
+        vendedor: globalVendedor,
+        dataSource: null
       }
-    }
+  }
+  
+  static navigationOptions = {
+    title: 'Visitas do Dia',
+  };
 
-    static navigationOptions = {
-      title: 'Escolher itens',
-    };
-
-    componentDidMount() {
-      this.getDataFirebase();
-    }
-
-    getDataFirebase() {
-        try{
-         let dbRef = db.ref('/salesforce001/Itens');
-         dbRef.on('value', (snapshot) => {
-           try{
-            a = 0;
-            
-            snapshot.forEach((item) => {
-              if(a <= 8){
-                a++;
-                items.push({
-                  Codigo: item.val().Codigo,
-                  Descricao: item.val().Descricao,
-                  Valor: item.val().Valor,
-                  Estoque: item.val().Estoque,
-                  Quantidade: 0,
-                  _key: item.key
-                });
-              }
-            });
-             this.setState({dataSource: this.state.dataSource.cloneWithRows(items), });
-           }
-           catch(error){
-             console.log("error: ", error);
-             this.setState({dataSource:this.state.dataSource.cloneWithRows(""),})
-           }
-         });
-       }
-       catch(error){
-         console.log("error: ", error);
-       }
+  componentDidMount() {
+    this.getDataFirebase();
   }
 
-    renderRow(rowData) {      
-      return (
-        <View style={styles.container}>
-          <View style={styles.item_desc}>
-            <Text style={styles.text}>
-              {rowData.Descricao}
+  getDataFirebase(){
+    var dataSourceParam = []
+
+    let dbRef = db.ref('/' + globalClienteId + '/Itens/')
+
+    dbRef.on('value', (snapshot) => {
+
+        snapshot.forEach(userSnapshot => {
+              dataSourceParam.push({
+                Codigo: userSnapshot.val().Codigo,
+                Descricao: userSnapshot.val().Descricao,
+                Valor: userSnapshot.val().Valor,
+                Estoque: userSnapshot.val().Estoque,
+                Quantidade: 0,
+                _key: userSnapshot.key
+              });
+        });
+
+        this.setState({dataSource: dataSourceParam})
+   }); 
+  }
+
+  _renderItem = ({item}) => {     
+   //console.log("Item", item) 
+    return (
+      <View style={styles.container}>
+        <View style={styles.item_desc}>
+          <Text style={styles.text}>
+            {item.Descricao}
+          </Text>
+          <View style={styles.item_desc2}>
+            <Text>
+              Estoque(un): {item.Estoque}
             </Text>
-            <View style={styles.item_desc2}>
-              <Text>
-                Estoque(un): {rowData.Estoque}
-              </Text>
-              <Text>
-                Preço(R$): {rowData.Valor.toFixed(2)}
-              </Text>
-            </View>            
-          </View>
-          <View style={styles.item_func}>
-            <Button style={styles.item} color="#2ecc71" title="+" onPress={this.onAddItem.bind(this, rowData, 1)}></Button>
-            <TextInput style={styles.item} value={rowData.Quantidade.toString()} />
-            <Button style={styles.item} color="#e74c3c" title="-" onPress={this.onAddItem.bind(this, rowData, -1)}></Button>
-          </View>
+            <Text>
+              Preço(R$): {item.Valor.toFixed(2)}
+            </Text>
+          </View>            
         </View>
-      );
+        <View style={styles.item_func}>
+          <Button style={styles.item} color="#2ecc71" title="+" onPress={this.onAdd.bind(this, item, 1)}></Button>
+          <TextInput style={styles.item} value={item.Quantidade.toString()} />
+          <Button style={styles.item} color="#e74c3c" title="-" onPress={this.onAdd.bind(this, item, -1)}></Button>
+        </View>
+      </View>
+    );
+  }
+
+  onAdd = (rowData, Add) => {
+    let items = this.state.dataSource;
+    let index = items.findIndex(x => x._key === rowData._key);
+    
+    console.log("Index", index);
+    
+    if(index !== -1){
+      items[index].Quantidade = parseInt(rowData.Quantidade) + Add;
     }
+    console.log("items[index].Quantidade", items[index].Quantidade);
 
-    onAddItem = (rowData, Add) => {
-      let index = items.findIndex(x => x._key === rowData._key);
-      
-      console.log("Index", index);
-     
-      if(index !== -1){
-        if(items[index].Quantidade >= 0) {
-          items[index].Quantidade = parseInt(rowData.Quantidade) + Add;          
-        }
-      }
+    this.setState((state, props) => {
+      return {counter: state.counter + props.step};
+    });
+    
+           
+  }
 
-      this.setState((state, props) => {
-        return {counter: state.counter + props.step};
-      });
-    }
-
-    onAddOrder = () => {
-      let itemsOrder = items.filter(item => item.Quantidade >= 1);
-
-      this.props.navigation.navigate('Pedido', {
-        itemsOrder: itemsOrder.slice(),
-      });
-    }
-
-      render() {        
-        return (
-          <View style={styles.view}>
-            <ListView 
-              dataSource={this.state.dataSource} 
-              renderRow={this.renderRow.bind(this)}
-              enableEmptySections={true}              
-            />
-            <View>
-              <Text>Total(R$) {this.state.total}</Text>
-              <Button title="Adicionar" onPress={this.onAddOrder.bind(this)}/>
-            </View>            
-          </View>
-        );
-      }
+  render() {
+    return (
+      <ScrollView style = {{backgroundColor: '#9cf6f9',}} scrollsToTop={false}>
+        <View style={styles.container}>
+            <FlatList 
+                        data={this.state.dataSource}
+                        renderItem={this._renderItem}
+                        ItemSeparatorComponent={()=><View style={{height:2, backgroundColor: '#f7f7f7'}} />}
+            />       
+        </View>      
+      </ScrollView>
+    );
+  }
 }
+
 
 const styles = StyleSheet.create({
   view: {
