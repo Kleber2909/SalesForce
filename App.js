@@ -5,6 +5,8 @@ import ItensEstoque from './com/devteam/salesforce/view/ItensEstoque'
 import ModulosCliente from './com/devteam/salesforce/view/ModulosCliente'
 import Configuracoes from './com/devteam/salesforce/view/Configuracoes'
 import Pedido from './com/devteam/salesforce/view/Pedido'
+import VisitasDia from './com/devteam/salesforce/view/VisitasDia'
+import HistoricoPedido from './com/devteam/salesforce/view/HistoricoPedido'
 import PedidoSelect from './com/devteam/salesforce/view/PedidoSelect';
 import { GetConfig } from './com/devteam/salesforce/persistence/Storage';
 
@@ -18,6 +20,8 @@ const RootStack = createStackNavigator({
   ModulosCliente: ModulosCliente,
   Configuracoes: Configuracoes,
   Pedido: Pedido,
+  VisitasDia: VisitasDia,
+  HistoricoPedido: HistoricoPedido
   PedidoSelect: PedidoSelect
 }, 
 {
