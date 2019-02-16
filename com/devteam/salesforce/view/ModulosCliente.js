@@ -14,13 +14,13 @@ export default class ModulosCliente extends React.Component {
     
     static navigationOptions = ({ navigation }) => {
       return {
-        title: (navigation.getParam('cliente', 'SALES FORCE')).Nome
+        title: (navigation.getParam('cliente', 'Sales Force')).Nome
       }
     };
 
     render() {
       return (
-        <ScrollView style = {{backgroundColor: '#9cf6f9',}} >
+        <ScrollView >
           <View style={styles.container}>   
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPress.bind(this, "Pedido")}  >
                   <Text style={styles.text}>    Criar pedido </Text>
@@ -43,7 +43,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
     alignItems: 'flex-start',
     justifyContent: 'center',
     flex: 1, 

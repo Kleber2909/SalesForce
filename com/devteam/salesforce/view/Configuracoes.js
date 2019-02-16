@@ -13,13 +13,13 @@ export default class Configuracoes extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'CONFIGURAÇÕES',
+    title: 'Configurações',
   };
   
   render() {
     return (
       
-      <ScrollView style = {{backgroundColor: '#9cf6f9',}} >
+      <ScrollView  >
         <View style={styles.container}>   
             <View > 
                 <Text style={styles.text}>Servidor </Text>
@@ -68,17 +68,16 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
     flex: 1, 
     margin: 10,
   },
 
   text: {fontSize: 20, },
   
-  textInput:{fontSize: 20, borderWidth: 1  },
+  textInput:{fontSize: 20, borderWidth: 1, paddingLeft: 5 },
 
-  botao:{fontSize: 20, marginHorizontal: 50, textAlign: 'center', backgroundColor: 'skyblue'  },
+  botao:{fontSize: 20, textAlign: 'center', backgroundColor: 'skyblue'  },
 
-  boxRow: { flexDirection: 'row',  height: 40, },
+  boxRow: { flexDirection: 'row',  height: 20, },
 
 });

@@ -40,7 +40,7 @@ export default class ListItens extends React.Component {
         //console.log("renderRow ", rowData);
         //console.log("Nome ", rowData.Nome);
         return (
-            <TouchableOpacity style={{height:75} } onPress={ this.onPressList.bind(this, rowData)}  >
+            <TouchableOpacity style={{height:75, }  } onPress={ this.onPressList.bind(this, rowData)}  >
                 <Text style={styles.text} >   {rowData.Descricao}</Text>
                 <Text style={styles.textDetalhes} >   Estoque: {rowData.Estoque}    Preço R$ {rowData.Valor}</Text>
             </TouchableOpacity>
