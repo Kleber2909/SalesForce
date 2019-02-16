@@ -104,7 +104,7 @@ export default class Pedido extends React.Component {
     dbRef.on('value', (snapshot) => {
       try {
         const pedidos = snapshot.val();
-        this.setState({ pedido: Object.values(pedidos).length }, () => {
+        this.setState({ pedido: Object.values(pedidos).length + 1 }, () => {
           console.log(this.state.pedido)
         })
       }
@@ -135,8 +135,7 @@ export default class Pedido extends React.Component {
           "Pedido enviado para processamento. :)"
         );
 
-        this.navigation.goBack();
-
+        this.props.navigation.goBack();
       }).catch((error) => {
         Alert.alert(
           "Erro",
@@ -180,7 +179,7 @@ export default class Pedido extends React.Component {
           <Text style={styles.title}>Data de entrega</Text>
           {datePicker}
           <Text style={styles.title}>Forma de pagamento </Text>
-          <Picker style={styles.text}
+          <Picker style={styles.picker}
             selectedValue={this.state.language}
             onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
             <Picker.Item label="À vista" value="0" />
@@ -229,6 +228,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text: { fontSize: 15, alignItems: 'center', justifyContent: 'space-around', marginTop: 10 },
+  picker: { alignItems: 'center', justifyContent: 'space-around', marginTop: 10 },
   button: {
     borderRadius: 10, padding: 10, margin: 10, backgroundColor: "skyblue", height: 30, alignItems: 'center', justifyContent: 'center'
   }
