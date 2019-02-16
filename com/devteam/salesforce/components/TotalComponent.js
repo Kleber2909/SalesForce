@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20, 
         fontWeight: 'bold',  
+        marginLeft: 20,
     },
     action: {
         flex: 1,

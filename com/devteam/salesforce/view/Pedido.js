@@ -51,10 +51,32 @@ export default class Pedido extends React.Component {
   }
 
   removeItem = item => {
-    const index = this.state.selectedItems.findIndex(i => i.codigo === item.codigo);
-    const items = index > -1 ? [...this.state.selectedItems.splice(index, 1)] : [...this.state.selectedItems];
+    const items = this.state.selectedItems.map(i => {
+      if (item.codigo === i.codigo) {
+        i = { ...item }
+        i.quantidade = item.quantidade - 1;
+      }
 
-    this.setState({ selectedItems: items });
+      if (i.quantidade < 0) {
+        i.quantidade = 0;
+      }
+
+      return i;
+    })
+
+    const selectedItems = items.filter(i => i.quantidade !== 0);
+
+    let total = 0;
+    selectedItems.forEach(i => {
+      if (i.quantidade > 0) {
+        total += i.valor * i.quantidade;
+      }
+    });
+
+    this.setState({
+      selectedItems: selectedItems,
+      total: total.toFixed(2),
+    });
   }
 
   selectItem = () => {
@@ -112,6 +134,9 @@ export default class Pedido extends React.Component {
           "Sucesso",
           "Pedido enviado para processamento. :)"
         );
+
+        this.navigation.goBack();
+
       }).catch((error) => {
         Alert.alert(
           "Erro",
@@ -128,18 +153,17 @@ export default class Pedido extends React.Component {
     } else {
       datePicker = (
         <TouchableOpacity onPress={this.toggleData}>
-          <Text style={styles.date}>
+          <Text>
             {moment(this.state.data).format('DD/MM/YYYY')}
           </Text>
         </TouchableOpacity>
       );
     }
 
-    var selectedItems = (<Text>Arriegua mah, compra alguma coisa cara :(</Text>)
+    var selectedItems = (<Text style={{ marginLeft: 10, marginTop: 10, fontWeight: 'bold' }}>Nenhum produto selecionado.</Text>)
     if (this.state.selectedItems.length !== 0) {
       selectedItems = (
         <View>
-          <Text>Aaah, agora sim :)</Text>
           <FlatList
             data={this.state.selectedItems}
             keyExtractor={item => `${item.codigo}`}
@@ -149,25 +173,24 @@ export default class Pedido extends React.Component {
       )
     }
     return (
-      <View style={styles.container} >
+      <View style={styles.container}>
         <View style={styles.form}>
-          <Text style={styles.text}>Cliente</Text>
+          <Text style={styles.title}>Cliente</Text>
           <Text style={styles.text}>{this.state.cliente.Nome}</Text>
-          <Text style={styles.text}>Data de entrega</Text>
+          <Text style={styles.title}>Data de entrega</Text>
           {datePicker}
-          <Text style={styles.text}>    Forma de pagamento </Text>
-          <Picker
+          <Text style={styles.title}>Forma de pagamento </Text>
+          <Picker style={styles.text}
             selectedValue={this.state.language}
-            style={styles.picker}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({ language: itemValue }, () => { console.log(this.state.language); })
-            }>
-            <Picker.Item label="À VISTA" value="0" />
-            <Picker.Item label="BOLETO" value="1" />
-            <Picker.Item label="CARTÃO" value="2" />
+            onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
+            <Picker.Item label="À vista" value="0" />
+            <Picker.Item label="Boleto" value="1" />
+            <Picker.Item label="Cartão" value="2" />
           </Picker>
-          <TouchableOpacity style={styles.Touchable} onPress={() => this.selectItem()} >
-            <Text style={styles.text}>Add Item</Text>
+          <TouchableOpacity onPress={() => this.selectItem()} >
+            <View style={styles.button}>
+              <Text style={{ fontWeight: 'bold' }}>Adicionar Produtos</Text>
+            </View>
           </TouchableOpacity>
         </View>
         <View style={styles.list}>
@@ -185,11 +208,9 @@ export default class Pedido extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20,
-    flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
+    paddingTop: 10,
+    marginLeft: 10,
+    marginRight: 10,
     flex: 1,
   },
   form: {
@@ -203,16 +224,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
   },
-  Touchable: { height: 75, },
-
-  text: { fontSize: 20, height: 30, alignItems: 'center', justifyContent: 'space-around' },
-
-  picker: { margin: 12, height: 30, width: 300 },
-
-  date: {
-    fontSize: 20,
-    marginLeft: 10,
+  title: {
+    fontWeight: 'bold',
     marginTop: 10,
+  },
+  text: { fontSize: 15, alignItems: 'center', justifyContent: 'space-around', marginTop: 10 },
+  button: {
+    borderRadius: 10, padding: 10, margin: 10, backgroundColor: "skyblue", height: 30, alignItems: 'center', justifyContent: 'center'
   }
-
 });
