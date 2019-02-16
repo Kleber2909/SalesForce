@@ -37,19 +37,18 @@ export default class ListItens extends React.Component {
      }
 
      renderRow(rowData) {
-        //console.log("renderRow ", rowData);
-        //console.log("Nome ", rowData.Nome);
         return (
-            <TouchableOpacity style={{height:75, }  } onPress={ this.onPressList.bind(this, rowData)}  >
-                <Text style={styles.text} >   {rowData.Descricao}</Text>
-                <Text style={styles.textDetalhes} >   Estoque: {rowData.Estoque}    Preço R$ {rowData.Valor}</Text>
-            </TouchableOpacity>
+            <TouchableOpacity  style={{flexDirection:'row', padding: 10, alignItems:'center'}} onPress={ this.onPressList.bind(this, rowData)}>
+              <View>
+                <Text style={{marginLeft: 10, fontWeight: 'bold'}}>{rowData.Descricao}</Text>
+                <Text style={{marginLeft: 10}}>Estoque: {rowData.Estoque}    Preço R$ {rowData.Valor}</Text>
+              </View>
+            </TouchableOpacity>            
     );
     }
 
     onPressList = (rowData) =>{
         console.log("clik " + rowData.Codigo)
-        //propspropsItens.navigation.navigate('ModulosCliente', {id: rowData.Codigo}); 
       }
 
       render() {
@@ -63,7 +62,6 @@ export default class ListItens extends React.Component {
               </View>
           );
         }
-
 }
 
 const styles = StyleSheet.create({
