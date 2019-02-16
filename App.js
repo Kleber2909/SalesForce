@@ -9,7 +9,6 @@ import VisitasDia from './com/devteam/salesforce/view/VisitasDia'
 import HistoricoPedido from './com/devteam/salesforce/view/HistoricoPedido'
 import PedidoSelect from './com/devteam/salesforce/view/PedidoSelect';
 import { GetConfig } from './com/devteam/salesforce/persistence/Storage';
-import Teste from './com/devteam/salesforce/controller/Teste'
 
 //global.globalClienteId = "salesforce001";
 GetConfig();
@@ -22,10 +21,10 @@ const RootStack = createStackNavigator({
   Configuracoes: Configuracoes,
   Pedido: Pedido,
   VisitasDia: VisitasDia,
-  HistoricoPedido: HistoricoPedido
+  HistoricoPedido: HistoricoPedido,
   PedidoSelect: PedidoSelect
 }, 
-{
+{ 
   // Tela inicial
   initialRouteName: "Home",
 
