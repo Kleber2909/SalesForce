@@ -4,6 +4,8 @@ npm install expo-cli --global
 npm install react-navigation --save
 npm install firebase --save
 
+npm install react-native-vector-icons --save
+
 npm i -s moment
 
 Para abrir o emulador do Android
