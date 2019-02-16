@@ -66,12 +66,3 @@ export default class ListClient extends React.Component {
     }
 
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
-    flex: 1, 
-  },
-});
