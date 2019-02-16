@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View, FlatList, Button, Text } from 'react-native';
 import ItemSelect from '../components/ItemSelect';
 import { db } from '../persistence/Firebase';
+import TotalComponent from '../components/TotalComponent';
 
 export default class PedidoSelect extends React.Component {
     state = {
@@ -11,9 +12,9 @@ export default class PedidoSelect extends React.Component {
 
     static navigationOptions = ({ navigation }) => {
         return {
-          title: "Selecionar items"
+            title: "Selecionar items"
         }
-      };
+    };
 
     componentDidMount() {
         this.getDataFirebase();
@@ -50,15 +51,15 @@ export default class PedidoSelect extends React.Component {
     addItems = () => {
         const selectedItems = this.state.items.filter(item => item.quantidade > 0)
         let total = 0;
-        
+
         this.state.items.forEach(i => {
-            if(i.quantidade > 0) {
+            if (i.quantidade > 0) {
                 total += i.valor * i.quantidade;
             }
-        });        
-        
+        });
+
         this.props.navigation.state.params.addSelectedItems(selectedItems, total);
-        this.props.navigation.goBack();        
+        this.props.navigation.goBack();
     }
 
     toggleItem = (props, newItem) => {
@@ -86,14 +87,15 @@ export default class PedidoSelect extends React.Component {
     render() {
         return (
             <View style={styles.container}>
-                <FlatList
-                    data={this.state.items}
-                    keyExtractor={item => `${item.codigo}`}
-                    renderItem={({ item }) => <ItemSelect {...item} toggleItem={this.toggleItem} />}
-                />
-                <View>
-                    <Text>Total(R$) {this.state.total}</Text>
-                    <Button title="Adicionar" onPress={this.addItems} />
+                <View style={styles.lista}>
+                    <FlatList
+                        data={this.state.items}
+                        keyExtractor={item => `${item.codigo}`}
+                        renderItem={({ item }) => <ItemSelect {...item} toggleItem={this.toggleItem} />}
+                    />
+                </View>
+                <View style={styles.total}>
+                    <TotalComponent style={styles.item} total={100} addItems={this.addItems} />
                 </View>
             </View>
         );
@@ -108,31 +110,10 @@ const styles = StyleSheet.create({
         borderColor: '#c9c9c9',
         padding: 10,
     },
-    item_desc: {
-        flex: 3,
-        justifyContent: 'flex-start',
-        flexDirection: 'column'
+    lista: {
+        flex: 9,
     },
-    item_desc2: {
-        flex: 1,
-        justifyContent: 'space-between',
-        flexDirection: 'row',
-        paddingRight: 10,
-    },
-    item_func: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center'
-    },
-    item: {
-        flex: 1,
-        textAlign: 'center',
-        textAlignVertical: "center",
-    },
-    item_add: {
-        color: '#2ecc71'
-    },
-    item_rem: {
-        color: '#e74c3c'
+    total: {
+        flex: 1
     }
 });
