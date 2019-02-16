@@ -1,22 +1,22 @@
 import React from 'react';
-import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, FlatList, Picker, Platform, DatePickerAndroid, DatePickerIOS } from 'react-native';
+import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, FlatList, Picker, ScrollView, Platform, DatePickerAndroid, DatePickerIOS, Alert } from 'react-native';
 import ItemComponent from '../components/ItemComponent';
 import moment from 'moment';
-
+import { db } from '../persistence/Firebase';
 
 export default class Pedido extends React.Component {
 
   constructor(props) {
     super(props);
     const { navigation } = this.props;
-    //const cliente = navigation.getParam('cliente', '');
-    const cliente = { nome: 'Leandro Jackson', codigo: '00001454' }
+    const cliente = navigation.getParam('cliente', '');
     this.state = {
       cliente: cliente,
       data: new Date(),
       itemsOrder: [],
       selectedItems: [],
       total: 0,
+      pedido: 0,
     }
   }
 
@@ -27,8 +27,7 @@ export default class Pedido extends React.Component {
   };
 
   componentDidMount() {
-    //this.setState({itemsOrder: this.props.navigation.getParam('itemsOrder', []) })
-    //console.log("items:" + this.state.itemsOrder)
+    this.getNextPedido();
   }
 
   addSelectedItems = (selectedItems, total) => {
@@ -58,7 +57,7 @@ export default class Pedido extends React.Component {
 
   selectItem = () => {
     console.log('navigation: PedidoSelect');
-    this.props.navigation.navigate('PedidoSelect', { addSelectedItems: this.addSelectedItems,  }, () => { console.log('voltou.') });
+    this.props.navigation.navigate('PedidoSelect', { addSelectedItems: this.addSelectedItems, });
   }
 
   toggleData = () => {
@@ -76,6 +75,49 @@ export default class Pedido extends React.Component {
     })
   }
 
+  getNextPedido() {    
+    let dbRef = db.ref('/salesforce001/Pedidos');
+    dbRef.on('value', (snapshot) => {
+      try {
+        const pedidos = snapshot.val();
+        this.setState({pedido: Object.values(pedidos).length }, () => {
+          console.log(this.state.pedido)
+        })        
+      }
+      catch (error) {
+        console.log("error: ", error);
+      }
+    })
+  } 
+
+  sendPedido = () => {
+    const pedido = {
+      Codigo: this.state.cliente.Codigo || 'Teste',
+      DataEntrega: moment(this.state.data).format('DD/MM/YYYY'),
+      FormaPg: this.state.language,
+      Nome: this.state.cliente.Nome || 'Testezim',
+      Vencimento: moment(this.state.data).add(30, 'days').format('DD/MM/YYYY'),
+      Vendedor: globalVendedor,
+      Itens: this.state.selectedItems,
+      Pedido: this.state.pedido,
+    }
+
+    let dbRef = db.ref('/' + globalClienteId +'/Pedidos/'+this.state.pedido+'/');
+    dbRef.set(pedido)
+      .then((data) => {
+        console.log(data);
+        Alert.alert(
+          "Sucesso",
+          "Pedido enviado para processamento. :)"
+        );
+      }).catch((error) => {
+        Alert.alert(
+          "Erro",
+          "Erro ao enviar seu pedido. :'("
+        );
+      });
+  }
+
   render() {
     let datePicker = null;
 
@@ -91,9 +133,9 @@ export default class Pedido extends React.Component {
       );
     }
 
-    var items = (<Text>Arriegua mah, compra alguma coisa cara :(</Text>)
+    var selectedItems = (<Text>Arriegua mah, compra alguma coisa cara :(</Text>)
     if (this.state.selectedItems.length !== 0) {
-      items = (
+      selectedItems = (
         <View>
           <Text>Aaah, agora sim :)</Text>
           <FlatList
@@ -108,7 +150,7 @@ export default class Pedido extends React.Component {
       <View >
         <View>
           <Text style={styles.text}>Cliente</Text>
-          <Text style={styles.text}>{this.state.cliente.nome}</Text>
+          <Text style={styles.text}>{this.state.cliente.Nome}</Text>
           <Text style={styles.text}>Data de entrega</Text>
           {datePicker}
           <Text style={styles.text}>    Forma de pagamento </Text>
@@ -116,52 +158,23 @@ export default class Pedido extends React.Component {
             selectedValue={this.state.language}
             style={styles.picker}
             onValueChange={(itemValue, itemIndex) =>
-              this.setState({ language: itemValue })
+              this.setState({ language: itemValue }, () => { console.log(this.state.language); })
             }>
             <Picker.Item label="À VISTA" value="0" />
             <Picker.Item label="BOLETO" value="1" />
             <Picker.Item label="CARTÃO" value="2" />
           </Picker>
-          <TouchableOpacity style={styles.Touchable} onPress={() => this.selectItem()}  >
+          <TouchableOpacity style={styles.Touchable} onPress={() => this.selectItem()} >
             <Text style={styles.text}>Add Item</Text>
           </TouchableOpacity>
         </View>
-        <View>
-          {/*  */}
-          {items}
-        </View>
-        <Button title='Pedir' onPress={() => {}}></Button>
+        <ScrollView>
+          {selectedItems}
+        </ScrollView>
+        <Button title='Pedir' onPress={this.sendPedido}></Button>
       </View>
     );
-  }
-
-  onPress = (rota) => {
-    console.log("rota " + rota)
-    this.props.navigation.navigate(rota);
-  }
-
-  renderRow(rowData) {
-    return (
-      <View style={styles.container}>
-        <View style={styles.item_desc}>
-          <Text style={styles.text}>
-            {rowData.Descricao}
-          </Text>
-          <View style={styles.item_desc2}>
-            <Text>
-              Estoque(un): {rowData.Estoque}
-            </Text>
-            <Text>
-              Preço(R$): {rowData.Valor.toFixed(2)}
-            </Text>
-          </View>
-        </View>
-        <View style={styles.item_func}>
-          <TextInput style={styles.item} value={rowData.Quantidade.toString()} />
-        </View>
-      </View>
-    );
-  }
+  }  
 }
 
 const styles = StyleSheet.create({
