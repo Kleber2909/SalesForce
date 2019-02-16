@@ -133,11 +133,10 @@ export default class Pedido extends React.Component {
       );
     }
 
-    var selectedItems = (<Text>Arriegua mah, compra alguma coisa cara :(</Text>)
+    var selectedItems = (<Text style={{marginLeft: 10,  marginTop:10, fontWeight: 'bold'}}>Nenhum produto selecionado.</Text>)
     if (this.state.selectedItems.length !== 0) {
       selectedItems = (
         <View>
-          <Text>Aaah, agora sim :)</Text>
           <FlatList
             data={this.state.selectedItems}
             keyExtractor={item => `${item.codigo}`}
@@ -147,26 +146,25 @@ export default class Pedido extends React.Component {
       )
     }
     return (
-      <View >
-        <View>
-          <Text style={styles.text}>Cliente</Text>
-          <Text style={styles.text}>{this.state.cliente.Nome}</Text>
-          <Text style={styles.text}>Data de entrega</Text>
+      <View style={styles.container}>
+        <View style={{marginLeft: 10}}>
+          <Text style={{marginLeft: 10, fontWeight: 'bold'}}>Cliente</Text>
+          <Text style={{marginLeft: 10}}>{this.state.cliente.Nome}</Text>
+          <Text style={{marginLeft: 10, marginTop:10, fontWeight: 'bold'}}>Data de entrega</Text>
           {datePicker}
-          <Text style={styles.text}>    Forma de pagamento </Text>
-          <Picker
-            selectedValue={this.state.language}
-            style={styles.picker}
-            onValueChange={(itemValue, itemIndex) =>
-              this.setState({ language: itemValue }, () => { console.log(this.state.language); })
-            }>
-            <Picker.Item label="À VISTA" value="0" />
-            <Picker.Item label="BOLETO" value="1" />
-            <Picker.Item label="CARTÃO" value="2" />
+          <Text style={{marginLeft: 10, marginTop:10, fontWeight: 'bold'}}>Forma de pagamento </Text>
+          <Picker style={{marginTop:-10}}
+                  selectedValue={this.state.language}
+                  onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue }, () => { console.log(this.state.language); })}>
+            <Picker.Item label="À vista" value="0" />
+            <Picker.Item label="Boleto" value="1" />
+            <Picker.Item label="Cartão" value="2" />
           </Picker>
-          <TouchableOpacity style={styles.Touchable} onPress={() => this.selectItem()} >
-            <Text style={styles.text}>Add Item</Text>
-          </TouchableOpacity>
+          <TouchableOpacity onPress={() => this.selectItem()} >
+            <View style={{borderRadius:10, padding:10, margin:20, backgroundColor:"skyblue", height:30, alignItems:'center', justifyContent: 'center'}}>
+              <Text style={{fontWeight: 'bold'}}>Adicionar Produtos</Text>
+            </View>          
+          </TouchableOpacity>        
         </View>
         <ScrollView>
           {selectedItems}
@@ -178,25 +176,14 @@ export default class Pedido extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    paddingTop: 20,
-    flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
-    alignItems: 'flex-start',
-    justifyContent: 'center',
-    flex: 1,
-  },
-
-  Touchable: { height: 75, },
-
-  text: { fontSize: 20, height: 30, alignItems: 'center', justifyContent: 'space-around' },
-
-  picker: { margin: 12, height: 30, width: 300 },
+    container: {
+      paddingTop: 20,
+      flexDirection: 'column',
+      flex: 1, 
+    },
 
   date: {
-    fontSize: 20,
     marginLeft: 10,
-    marginTop: 10,
   }
 
 });
