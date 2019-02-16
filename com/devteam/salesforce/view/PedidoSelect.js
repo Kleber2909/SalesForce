@@ -90,7 +90,7 @@ export default class PedidoSelect extends React.Component {
 
         this.setState({ 
                 items: items,
-                total: total
+                total: total.toFixed(2),
             });
     }
 
@@ -105,7 +105,7 @@ export default class PedidoSelect extends React.Component {
                     />
                 </View>
                 <View style={styles.total}>
-                    <TotalComponent style={styles.item} total={100} addItems={this.addItems} />
+                    <TotalComponent style={styles.item} total={this.state.total} addItems={this.addItems} />
                 </View>
             </View>
         );

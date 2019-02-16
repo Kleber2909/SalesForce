@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, FlatList, Picker, ScrollView, Platform, DatePickerAndroid, DatePickerIOS, Alert } from 'react-native';
 import ItemComponent from '../components/ItemComponent';
+import TotalComponent from '../components/TotalComponent';
 import moment from 'moment';
+import 'moment/locale/pt-br';
 import { db } from '../persistence/Firebase';
 
 export default class Pedido extends React.Component {
@@ -75,20 +77,20 @@ export default class Pedido extends React.Component {
     })
   }
 
-  getNextPedido() {    
+  getNextPedido() {
     let dbRef = db.ref('/salesforce001/Pedidos');
     dbRef.on('value', (snapshot) => {
       try {
         const pedidos = snapshot.val();
-        this.setState({pedido: Object.values(pedidos).length }, () => {
+        this.setState({ pedido: Object.values(pedidos).length }, () => {
           console.log(this.state.pedido)
-        })        
+        })
       }
       catch (error) {
         console.log("error: ", error);
       }
     })
-  } 
+  }
 
   sendPedido = () => {
     const pedido = {
@@ -102,7 +104,7 @@ export default class Pedido extends React.Component {
       Pedido: this.state.pedido,
     }
 
-    let dbRef = db.ref('/' + globalClienteId +'/Pedidos/'+this.state.pedido+'/');
+    let dbRef = db.ref('/' + globalClienteId + '/Pedidos/' + this.state.pedido + '/');
     dbRef.set(pedido)
       .then((data) => {
         console.log(data);
@@ -127,7 +129,7 @@ export default class Pedido extends React.Component {
       datePicker = (
         <TouchableOpacity onPress={this.toggleData}>
           <Text style={styles.date}>
-            {moment(this.state.data).format('ddd, D [de] YYYY')}
+            {moment(this.state.data).format('DD/MM/YYYY')}
           </Text>
         </TouchableOpacity>
       );
@@ -147,8 +149,8 @@ export default class Pedido extends React.Component {
       )
     }
     return (
-      <View >
-        <View>
+      <View style={styles.container} >
+        <View style={styles.form}>
           <Text style={styles.text}>Cliente</Text>
           <Text style={styles.text}>{this.state.cliente.Nome}</Text>
           <Text style={styles.text}>Data de entrega</Text>
@@ -168,13 +170,17 @@ export default class Pedido extends React.Component {
             <Text style={styles.text}>Add Item</Text>
           </TouchableOpacity>
         </View>
-        <ScrollView>
-          {selectedItems}
-        </ScrollView>
-        <Button title='Pedir' onPress={this.sendPedido}></Button>
+        <View style={styles.list}>
+          <ScrollView>
+            {selectedItems}
+          </ScrollView>
+        </View >
+        <View style={styles.foot}>
+          <TotalComponent total={this.state.total} addItems={this.sendPedido} />
+        </View>
       </View>
     );
-  }  
+  }
 }
 
 const styles = StyleSheet.create({
@@ -186,7 +192,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flex: 1,
   },
-
+  form: {
+    flex: 4,
+  },
+  list: {
+    flex: 6,
+    flexDirection: 'row',
+  },
+  foot: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   Touchable: { height: 75, },
 
   text: { fontSize: 20, height: 30, alignItems: 'center', justifyContent: 'space-around' },
