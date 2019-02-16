@@ -1,7 +1,9 @@
 import React from 'react';
 import { StyleSheet, Text, TextInput, View, Button, TouchableOpacity, FlatList, Picker, ScrollView, Platform, DatePickerAndroid, DatePickerIOS, Alert } from 'react-native';
 import ItemComponent from '../components/ItemComponent';
+import TotalComponent from '../components/TotalComponent';
 import moment from 'moment';
+import 'moment/locale/pt-br';
 import { db } from '../persistence/Firebase';
 
 export default class Pedido extends React.Component {
@@ -49,10 +51,32 @@ export default class Pedido extends React.Component {
   }
 
   removeItem = item => {
-    const index = this.state.selectedItems.findIndex(i => i.codigo === item.codigo);
-    const items = index > -1 ? [...this.state.selectedItems.splice(index, 1)] : [...this.state.selectedItems];
+    const items = this.state.selectedItems.map(i => {
+      if (item.codigo === i.codigo) {
+        i = { ...item }
+        i.quantidade = item.quantidade - 1;
+      }
 
-    this.setState({ selectedItems: items });
+      if (i.quantidade < 0) {
+        i.quantidade = 0;
+      }
+
+      return i;
+    })
+
+    const selectedItems = items.filter(i => i.quantidade !== 0);
+
+    let total = 0;
+    selectedItems.forEach(i => {
+      if (i.quantidade > 0) {
+        total += i.valor * i.quantidade;
+      }
+    });
+
+    this.setState({
+      selectedItems: selectedItems,
+      total: total.toFixed(2),
+    });
   }
 
   selectItem = () => {
@@ -75,20 +99,20 @@ export default class Pedido extends React.Component {
     })
   }
 
-  getNextPedido() {    
+  getNextPedido() {
     let dbRef = db.ref('/salesforce001/Pedidos');
     dbRef.on('value', (snapshot) => {
       try {
         const pedidos = snapshot.val();
-        this.setState({pedido: Object.values(pedidos).length }, () => {
+        this.setState({ pedido: Object.values(pedidos).length + 1 }, () => {
           console.log(this.state.pedido)
-        })        
+        })
       }
       catch (error) {
         console.log("error: ", error);
       }
     })
-  } 
+  }
 
   sendPedido = () => {
     const pedido = {
@@ -102,7 +126,7 @@ export default class Pedido extends React.Component {
       Pedido: this.state.pedido,
     }
 
-    let dbRef = db.ref('/' + globalClienteId +'/Pedidos/'+this.state.pedido+'/');
+    let dbRef = db.ref('/' + globalClienteId + '/Pedidos/' + this.state.pedido + '/');
     dbRef.set(pedido)
       .then((data) => {
         console.log(data);
@@ -110,6 +134,8 @@ export default class Pedido extends React.Component {
           "Sucesso",
           "Pedido enviado para processamento. :)"
         );
+
+        this.props.navigation.goBack();
       }).catch((error) => {
         Alert.alert(
           "Erro",
@@ -126,14 +152,14 @@ export default class Pedido extends React.Component {
     } else {
       datePicker = (
         <TouchableOpacity onPress={this.toggleData}>
-          <Text style={styles.date}>
-            {moment(this.state.data).format('ddd, D [de] YYYY')}
+          <Text>
+            {moment(this.state.data).format('DD/MM/YYYY')}
           </Text>
         </TouchableOpacity>
       );
     }
 
-    var selectedItems = (<Text style={{marginLeft: 10,  marginTop:10, fontWeight: 'bold'}}>Nenhum produto selecionado.</Text>)
+    var selectedItems = (<Text style={{ marginLeft: 10, marginTop: 10, fontWeight: 'bold' }}>Nenhum produto selecionado.</Text>)
     if (this.state.selectedItems.length !== 0) {
       selectedItems = (
         <View>
@@ -147,43 +173,63 @@ export default class Pedido extends React.Component {
     }
     return (
       <View style={styles.container}>
-        <View style={{marginLeft: 10}}>
-          <Text style={{marginLeft: 10, fontWeight: 'bold'}}>Cliente</Text>
-          <Text style={{marginLeft: 10}}>{this.state.cliente.Nome}</Text>
-          <Text style={{marginLeft: 10, marginTop:10, fontWeight: 'bold'}}>Data de entrega</Text>
+        <View style={styles.form}>
+          <Text style={styles.title}>Cliente</Text>
+          <Text style={styles.text}>{this.state.cliente.Nome}</Text>
+          <Text style={styles.title}>Data de entrega</Text>
           {datePicker}
-          <Text style={{marginLeft: 10, marginTop:10, fontWeight: 'bold'}}>Forma de pagamento </Text>
-          <Picker style={{marginTop:-10}}
-                  selectedValue={this.state.language}
-                  onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue }, () => { console.log(this.state.language); })}>
+          <Text style={styles.title}>Forma de pagamento </Text>
+          <Picker style={styles.picker}
+            selectedValue={this.state.language}
+            onValueChange={(itemValue, itemIndex) => this.setState({ language: itemValue })}>
             <Picker.Item label="À vista" value="0" />
             <Picker.Item label="Boleto" value="1" />
             <Picker.Item label="Cartão" value="2" />
           </Picker>
           <TouchableOpacity onPress={() => this.selectItem()} >
-            <View style={{borderRadius:10, padding:10, margin:20, backgroundColor:"skyblue", height:30, alignItems:'center', justifyContent: 'center'}}>
-              <Text style={{fontWeight: 'bold'}}>Adicionar Produtos</Text>
-            </View>          
-          </TouchableOpacity>        
+            <View style={styles.button}>
+              <Text style={{ fontWeight: 'bold' }}>Adicionar Produtos</Text>
+            </View>
+          </TouchableOpacity>
         </View>
-        <ScrollView>
-          {selectedItems}
-        </ScrollView>
-        <Button title='Pedir' onPress={this.sendPedido}></Button>
+        <View style={styles.list}>
+          <ScrollView>
+            {selectedItems}
+          </ScrollView>
+        </View >
+        <View style={styles.foot}>
+          <TotalComponent total={this.state.total} addItems={this.sendPedido} />
+        </View>
       </View>
     );
-  }  
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      paddingTop: 20,
-      flexDirection: 'column',
-      flex: 1, 
-    },
-
-  date: {
+  container: {
+    paddingTop: 10,
     marginLeft: 10,
+    marginRight: 10,
+    flex: 1,
+  },
+  form: {
+    flex: 4,
+  },
+  list: {
+    flex: 6,
+    flexDirection: 'row',
+  },
+  foot: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  title: {
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+  text: { fontSize: 15, alignItems: 'center', justifyContent: 'space-around', marginTop: 10 },
+  picker: { alignItems: 'center', justifyContent: 'space-around', marginTop: 10 },
+  button: {
+    borderRadius: 10, padding: 10, margin: 10, backgroundColor: "skyblue", height: 30, alignItems: 'center', justifyContent: 'center'
   }
-
 });
