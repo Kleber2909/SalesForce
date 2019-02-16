@@ -21,10 +21,10 @@ const RootStack = createStackNavigator({
   Configuracoes: Configuracoes,
   Pedido: Pedido,
   VisitasDia: VisitasDia,
-  HistoricoPedido: HistoricoPedido
+  HistoricoPedido: HistoricoPedido,
   PedidoSelect: PedidoSelect
 }, 
-{
+{ 
   // Tela inicial
   initialRouteName: "Home",
 
