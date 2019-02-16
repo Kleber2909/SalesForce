@@ -1,8 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, Button, TouchableOpacity, TextInput, Alert, Image} from 'react-native';
 
-
-
 export default class Home extends React.Component {
   
   constructor(props) {
@@ -18,7 +16,7 @@ export default class Home extends React.Component {
       
       <ScrollView style = {{backgroundColor: '#9cf6f9',}} >
         <View style={styles.container}>   
-            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "Teste")}  >
+            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "VisitasDia")}  >
                 <Text style={styles.text}>    Visitas do dia </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "Clientes")}  >
@@ -27,7 +25,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "ItensEstoque")}  >
                 <Text style={styles.text}>    Consulta de estoque </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "")}  >
+            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "HistoricoPedido")}  >
                 <Text style={styles.text}>    Histórico de pedidos </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "Configuracoes")}  >

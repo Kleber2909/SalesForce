@@ -55,7 +55,9 @@ export default class Configuracoes extends React.Component {
       };
     SalveConfig(JSON.stringify(config));
     GetConfig ();
-    //SalveConfig("{Servidor:\"salesforce001\", Vendedor:\"1\"}");
+
+    alert('Configurações salvas com sucesso !')
+    this.props.navigation.goBack();
   }
 
 }
