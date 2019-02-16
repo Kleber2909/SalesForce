@@ -12,7 +12,7 @@ export default class Clientes extends React.Component {
   }
 
   static navigationOptions = {
-    title: 'CLIENTES',
+    title: 'Clientes',
   };
   
   render() {

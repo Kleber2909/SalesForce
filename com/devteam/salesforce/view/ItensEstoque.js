@@ -12,12 +12,12 @@ export default class ItensEstoque extends React.Component {
   }
   
   static navigationOptions = {
-    title: 'LISTA DE ITENS',
+    title: 'Lista de itens',
   };
 
   render() {
     return (
-      <ScrollView style = {{backgroundColor: '#9cf6f9',}} scrollsToTop={false}>
+      <ScrollView  scrollsToTop={false}>
         <View style={styles.container}>   
           <ListItens/>          
       </View>      
@@ -32,7 +32,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
     alignItems: 'flex-start',
     flex: 1, 
   },

@@ -115,12 +115,12 @@ export default class HistoricoPedido extends React.Component {
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around', paddingTop: 20, paddingBottom: 20, backgroundColor:"skyblue"}}>
                 <TouchableOpacity onPress={ this.onClick.bind(this, 0)} >
                     <View>
-                        <Text style={{fontWeight: this.state.aberto}}>Abertos</Text>
+                        <Text style={{fontWeight: this.state.aberto, color:'white'}}>Abertos</Text>
                     </View>
                 </TouchableOpacity >  
                 <TouchableOpacity onPress={ this.onClick.bind(this, 1)}>
                     <View>
-                        <Text style={{fontWeight: this.state.vencido}}>Vencidos</Text>
+                        <Text style={{fontWeight: this.state.vencido, color:'white'}}>Vencidos</Text>
                     </View>
                 </TouchableOpacity >  
             </View>

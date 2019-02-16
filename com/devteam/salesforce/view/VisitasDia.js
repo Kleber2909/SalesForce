@@ -109,13 +109,13 @@ export default class VisitasDia extends React.Component {
         <View style={styles.container}>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around'}}>
                 <TouchableOpacity onPress={() => this.PreviousDay()} >
-                    <View style={{borderRadius:10, backgroundColor:"#00b2f6", height:30, width:30, alignItems:'center', justifyContent: 'center'}}>
+                    <View style={{borderRadius:10, backgroundColor:"skyblue", height:30, width:30, alignItems:'center', justifyContent: 'center'}}>
                         <Icon name="angle-left" color="white" />
                     </View>
                 </TouchableOpacity >  
-                <Text>{this.state.DayName}</Text>
+                <Text style={{fontWeight:'bold', alignItems:'center', justifyContent: 'center'}}>{this.state.DayName}</Text>
                 <TouchableOpacity onPress={() => this.NextDay()} >
-                    <View style={{borderRadius:10, backgroundColor:"#00b2f6", height:30, width:30, alignItems:'center', justifyContent: 'center'}}>
+                    <View style={{borderRadius:10, backgroundColor:"skyblue", height:30, width:30, alignItems:'center', justifyContent: 'center'}}>
                     <Icon name="angle-right" color="white" />
                     </View>
                 </TouchableOpacity >  

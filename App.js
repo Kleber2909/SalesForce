@@ -24,14 +24,14 @@ const RootStack = createStackNavigator({
   HistoricoPedido: HistoricoPedido,
   PedidoSelect: PedidoSelect
 }, 
-{
+{ 
   // Tela inicial
   initialRouteName: "Home",
 
   // Configurações do layout do cabeçalho
   defaultNavigationOptions: {
     headerStyle: {
-      backgroundColor: '#f4511e',
+      backgroundColor: '#759cd8',
     },
     headerTintColor: '#fff',
     headerTitleStyle: {
