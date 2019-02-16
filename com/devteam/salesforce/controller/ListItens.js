@@ -41,7 +41,7 @@ export default class ListItens extends React.Component {
             <TouchableOpacity  style={{flexDirection:'row', padding: 10, alignItems:'center'}} onPress={ this.onPressList.bind(this, rowData)}>
               <View>
                 <Text style={{marginLeft: 10, fontWeight: 'bold'}}>{rowData.Descricao}</Text>
-                <Text style={{marginLeft: 10}}>Estoque: {rowData.Estoque}    Preço R$ {rowData.Valor}</Text>
+                <Text style={{marginLeft: 10}}>Estoque: {rowData.Estoque}    Preço R$ {parseInt(rowData.Valor).toFixed(2)}</Text>
               </View>
             </TouchableOpacity>            
     );

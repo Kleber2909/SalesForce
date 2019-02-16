@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, Text, TextInput, Button, FlatList } from 'react-native';
+import { StyleSheet, View, Text, Button, FlatList } from 'react-native';
 import { db } from '../persistence/Firebase';
 import PedidoItem from '../components/PedidoItem';
 
@@ -14,7 +14,7 @@ export default class AddTask extends Component {
 
     getDataFirebase() {
         try{
-         let dbRef = db.ref('/salesforce001/Itens');
+         let dbRef = db.ref('/' + globalClienteId + '/Itens');
          dbRef.on('value', (snapshot) => {
            try {
                let dbItems = [];
@@ -62,7 +62,6 @@ export default class AddTask extends Component {
         this.props.onSave(data)
         this.setState({ ...initialState })
     }
-
 
     render() {
         return(
