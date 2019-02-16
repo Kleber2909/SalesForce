@@ -25,7 +25,7 @@ export default class ModulosCliente extends React.Component {
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPress.bind(this, "Pedido")}  >
                   <Text style={styles.text}>    Criar pedido </Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.Touchable } onPress={ this.onPress.bind(this, "Clientes")}  >
+              <TouchableOpacity style={styles.Touchable } onPress={ this.onPress.bind(this, "HistoricoPedido")}  >
                   <Text style={styles.text}>    Histórico de pedidos </Text>
               </TouchableOpacity>
           </View>  
