@@ -25,7 +25,7 @@ export default class Home extends React.Component {
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "ItensEstoque")}  >
                 <Text style={styles.text}>    Consulta de estoque </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "")}  >
+            <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "HistoricoPedido")}  >
                 <Text style={styles.text}>    Histórico de pedidos </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.Touchable } onPress={ this.onPressList.bind(this, "Configuracoes")}  >

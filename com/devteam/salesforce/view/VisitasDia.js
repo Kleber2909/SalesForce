@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput, Alert, Image, FlatList} from 'react-native';
-import ListItens from '../controller/ListItens';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { SalveConfig, GetConfig } from '../persistence/Storage';
 import { db } from '../persistence/Firebase';
@@ -106,7 +105,7 @@ export default class VisitasDia extends React.Component {
 
   render() {
     return (
-      <ScrollView style = {{backgroundColor: '#9cf6f9',}} scrollsToTop={false}>
+      <ScrollView scrollsToTop={false}>
         <View style={styles.container}>
             <View style={{flex: 1, flexDirection: 'row', justifyContent:'space-around'}}>
                 <TouchableOpacity onPress={() => this.PreviousDay()} >
@@ -136,7 +135,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 20,
     flexDirection: 'column',
-    backgroundColor: '#9cf6f9',
     flex: 1, 
   },
 });
