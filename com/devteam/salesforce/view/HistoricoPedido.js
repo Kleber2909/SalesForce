@@ -102,7 +102,7 @@ export default class HistoricoPedido extends React.Component {
             <View>
                 <View style={{flexDirection:'row', padding: 10}}>
                     <Text style={{marginLeft: 10, fontWeight: 'bold'}}>Pedido: {item.Pedido}</Text>
-                    <Text style={{marginLeft: 20}}>{item.Vencimento}</Text>
+                    <Text style={{marginLeft: 20}}>Vencimento: {item.Vencimento}</Text>
                 </View>
                 <Text style={{marginLeft: 20, fontWeight: 'bold'}}>{item.Nome}</Text>
             </View>

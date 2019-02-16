@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Button, TouchableOpacity, TextInput, Alert, Image} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, TextInput } from 'react-native';
 import { SalveConfig, GetConfig } from '../persistence/Storage';
 
 export default class Configuracoes extends React.Component {
