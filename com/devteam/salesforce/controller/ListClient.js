@@ -36,9 +36,14 @@ export default class ListClient extends React.Component {
        }); 
      }
 
+     onPressList = (rowData) =>{
+      console.log("clik " + rowData.Codigo)
+      propsClientes.navigation.navigate('ModulosCliente', {cliente: rowData, }); 
+}
+
      _renderItem = ({item}) => {      
       return  (
-                  <TouchableOpacity  style={{flexDirection:'row', padding: 10, alignItems:'center'}} >
+                  <TouchableOpacity  style={{flexDirection:'row', padding: 10, alignItems:'center'}} onPress={ this.onPressList.bind(this, item)}>
                       <View>
                           <Text style={{marginLeft: 10, fontWeight: 'bold'}}>{item.Nome}</Text>
                           <Text style={{marginLeft: 10}}>{item.Endereco}</Text>

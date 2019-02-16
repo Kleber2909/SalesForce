@@ -81,7 +81,17 @@ export default class PedidoSelect extends React.Component {
             return item;
         })
 
-        this.setState({ items });
+        let total = 0;
+        items.forEach(i => {
+            if(i.quantidade > 0) {
+                total += i.valor * i.quantidade;
+            }
+        });  
+
+        this.setState({ 
+                items: items,
+                total: total
+            });
     }
 
     render() {
